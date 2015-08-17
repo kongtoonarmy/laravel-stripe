@@ -15,25 +15,34 @@ use Stripe\Coupon as StripeCoupon;
 
 class StripeController extends Controller
 {
+
+    private $apiKey;
+    public function __construct()
+    {   
+        $this->apiKey = 'sk_test_cSuI6EMM4LBCweRvWLE52F9u';
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *
      * @return Response
      */
-    public function index()
+    public function temp()
     {
         // pk_test_qx6HZIL9k78PB0LbUMIxa28C
 
-        Stripe::setApiKey("sk_test_cSuI6EMM4LBCweRvWLE52F9u");
+        
 
-        $stripeCoupon = StripeCoupon::create(array(
+        /*$stripeCoupon = StripeCoupon::create([
             "percent_off" => 25,
             "duration" => "repeating",
             "duration_in_months" => 3,
-            "id" => "25OFF")
-        );
+            "id" => "25OFF"]
+        );*/
 
-        $stripeToken = StripeToken::create([
+       /* $stripeToken = StripeToken::create([
             "card" => [
                 "number" => "4242424242424242",
                 "exp_month" => 8,
@@ -42,13 +51,33 @@ class StripeController extends Controller
             ]
         ]);
 
-        /*StripeCharge::create([
+        echo '<pre>';
+        print_r($stripeToken);
+        echo '</pre>';*/
+
+        
+
+    }
+
+    public function index(Request $request)
+    {
+        $token = $request->input('stripeToken');
+        echo 'token = '.$token;
+    }
+
+    public function createCharge()
+    {
+        Stripe::setApiKey($this->apiKey);
+
+        $stripeCharge = StripeCharge::create([
             'amount' => 2000, // this is in cents: $20
             'currency' => 'usd',
-            'card' => '25365488',
+            'card' => 'tok_16ZzIaH7PksWTbQLK6AvzuVR',
             'description' => 'Describe your product'
-        ]);*/
+        ]);
      
-
+        echo '<pre>';
+        print_r($stripeCharge);
+        echo '</pre>';
     }
 }

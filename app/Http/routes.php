@@ -15,5 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/payment', 'PaymentController@index');
 
-Route::get('/stripe', 'StripeController@index');
+Route::post('/stripe', 'StripeController@index');
+Route::get('/stripe/create-charge', 'StripeController@createCharge');
