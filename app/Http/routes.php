@@ -19,3 +19,7 @@ Route::get('/payment', 'PaymentController@index');
 
 Route::post('/stripe', 'StripeController@index');
 Route::get('/stripe/create-charge', 'StripeController@createCharge');
+
+Route::get('/user/create', 'UserController@create');
+Route::get('/user/show/{customerID}', 'UserController@show');
+Route::post('/user/store', 'UserController@store');
