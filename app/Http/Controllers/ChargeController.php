@@ -14,12 +14,13 @@ use Stripe\Token as StripeToken;
 use Stripe\Coupon as StripeCoupon;
 use Stripe\Customer as StripeCustomer;
 
-class UserController extends Controller
+class ChargeController extends Controller
 {
-    private $apiKey;
+
+    private $stripeConfig;
     public function __construct()
     {   
-        $this->apiKey = 'sk_test_cSuI6EMM4LBCweRvWLE52F9u';
+        $this->stripeConfig = \Config::get('stripe');
     }
 
     /**
@@ -39,7 +40,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');      
+        return view('charge.create'); 
     }
 
     /**
@@ -50,16 +51,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $token = $request->input('stripeToken');
-        $email = $request->input('email');
+        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
 
-        Stripe::setApiKey($this->apiKey);
+        $stripeToken = $request->input('stripeToken');        
+        $amount = $request->input('amount');        
+        $currency = $request->input('currency');        
+        $description = $request->input('description');      
 
-        $customer = StripeCustomer::create([
-            "email" => $email,
-            "description" => "Description of $email",
-            "source" => $token // obtained with Stripe.js
+        echo '<pre>';
+        var_dump($request->all());
+        echo '</pre>';  
+
+        $charge = StripeCharge::create([
+            "amount" => $amount,
+            "currency" => $currency,
+            "source" => $stripeToken,
+            "description" => $description 
         ]);
+
+        //return redirect('/account');
     }
 
     /**
@@ -68,17 +78,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($customerID)
+    public function show($id)
     {
-        Stripe::setApiKey($this->apiKey);
-
-        $customerRetrieve = StripeCustomer::retrieve($customerID);
-
-        /*echo '<pre>';
-        print_r($customerRetrieve);
-        echo '</pre>';*/
-
-        return view('user.show', compact('customerRetrieve'));
+        //
     }
 
     /**

@@ -20,6 +20,15 @@ Route::get('/payment', 'PaymentController@index');
 Route::post('/stripe', 'StripeController@index');
 Route::get('/stripe/create-charge', 'StripeController@createCharge');
 
-Route::get('/user/create', 'UserController@create');
-Route::get('/user/show/{customerID}', 'UserController@show');
-Route::post('/user/store', 'UserController@store');
+Route::get('/charge/create', 'ChargeController@create');
+Route::post('/charge/store', 'ChargeController@store');
+
+Route::get('/account', 'AccountController@index');
+Route::get('/account/create', 'AccountController@create');
+Route::post('/account/store', 'AccountController@store');
+Route::delete('/account/destroy/{accountId}', 'AccountController@destroy');	
+//Route::get('/account/destroy/{accountId}', 'AccountController@destroy');	
+
+Route::get('/customer/create', 'CustomerController@create');
+Route::get('/customer/show/{customerID}', 'CustomerController@show');
+Route::post('/customer/store', 'CustomerController@store');

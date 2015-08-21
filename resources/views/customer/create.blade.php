@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Create Payment</title>
+	<title>Create Customer</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -41,7 +41,7 @@
 </head>
 <body>
 	<div class="container">
-	<form action="/user/store" method="POST" id="payment-form">
+	<form action="/customer/store" method="POST" id="payment-form">
 		<span class="payment-errors"></span>
 
 		<div class="form-group">

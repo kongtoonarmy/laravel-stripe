@@ -16,10 +16,10 @@ use Stripe\Coupon as StripeCoupon;
 class StripeController extends Controller
 {
 
-    private $apiKey;
+    private $stripeConfig;
     public function __construct()
     {   
-        $this->apiKey = 'sk_test_cSuI6EMM4LBCweRvWLE52F9u';
+        $this->stripeConfig = \Config::get('stripe');
     }
 
 
@@ -67,7 +67,7 @@ class StripeController extends Controller
 
     public function createCharge()
     {
-        Stripe::setApiKey($this->apiKey);
+        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
 
         $stripeCharge = StripeCharge::create([
             'amount' => 2000, // this is in cents: $20
