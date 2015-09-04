@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', ['as' => 'home', function () {
     return view('welcome');
-});
+}]);
 
 Route::get('/payment', 'PaymentController@index');
 
@@ -36,3 +36,7 @@ Route::resource('account', 'AccountController');
 Route::get('/customer/create', 'CustomerController@create');
 Route::get('/customer/show/{customerID}', 'CustomerController@show');
 Route::post('/customer/store', 'CustomerController@store');
+
+Route::get('macbook', ['as' => 'macbook', function() {
+	return 'Hello macbook page';
+}]);

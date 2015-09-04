@@ -1,5 +1,7 @@
 @extends('app')
 
+@section('breadcrumbs', Breadcrumbs::render('account.create'))
+
 @section('content')
 <h2>Create New Account</h2>
 <form action="/account" method="POST" id="payment-form">

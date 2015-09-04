@@ -145,7 +145,8 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Illuminate\View\ViewServiceProvider::class,
-        Illuminate\Html\HtmlServiceProvider::class
+        Illuminate\Html\HtmlServiceProvider::class,
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class
     ],
 
     /*
@@ -195,7 +196,8 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'Form'      => Illuminate\Html\FormFacade::class,
-        'Html'      => Illuminate\Html\HtmlFacade::class
+        'Html'      => Illuminate\Html\HtmlFacade::class,
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class
     ],
 
 ];

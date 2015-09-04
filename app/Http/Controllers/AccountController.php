@@ -98,6 +98,8 @@ class AccountController extends Controller
 
             $stripeAccount = StripeAccount::retrieve($accountId);
 
+            return view('account.show', ['account' => $stripeAccount]);    
+
         } catch (StripeError\Base $e) {
 
             return $e->getMessage();
