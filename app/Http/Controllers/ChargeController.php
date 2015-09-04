@@ -13,6 +13,7 @@ use Stripe\Charge as StripeCharge;
 use Stripe\Token as StripeToken;
 use Stripe\Coupon as StripeCoupon;
 use Stripe\Customer as StripeCustomer;
+use Stripe\Error as StripeError;
 
 class ChargeController extends Controller
 {
@@ -58,18 +59,31 @@ class ChargeController extends Controller
         $currency = $request->input('currency');        
         $description = $request->input('description');      
 
-        echo '<pre>';
-        var_dump($request->all());
-        echo '</pre>';  
+        try {
 
-        $charge = StripeCharge::create([
-            "amount" => $amount,
-            "currency" => $currency,
-            "source" => $stripeToken,
-            "description" => $description 
-        ]);
+            echo '<pre>';
+            print_r($request->all());
+            echo '</pre>';
 
-        //return redirect('/account');
+            $charge = StripeCharge::create([
+                "amount" => $amount,
+                "currency" => $currency,
+                "source" => $stripeToken,
+                "description" => $description,
+                "capture" => false
+
+            ]);
+
+            echo 'Charge has been added successfully.';
+
+        } catch (StripeError\Base $err) {
+
+            $errBody = $err->getJsonBody();
+
+            echo 'Status is: ' . $err->getHttpStatus() . '<br>';
+            echo 'Param is: ' . $errBody['error']['param'] . '<br>';
+            echo 'Message is: ' . $errBody['error']['message'] . '<br>';
+        }
     }
 
     /**
@@ -78,9 +92,27 @@ class ChargeController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show($code)
     {
-        //
+        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+
+        try {
+
+            $stripeCharge = StripeCharge::retrieve($code);
+
+            echo '<pre>';
+            print_r($stripeCharge);
+            echo '</pre>';
+
+        } catch (StripeError\Base $e) {
+
+            $errorBody = $e->getJsonBody();
+
+            echo 'Status is: ' . $e->getHttpStatus() . '<br>';
+            echo 'Param is: ' . $errorBody['error']['param'] . '<br>';
+            echo 'Message is: ' . $errorBody['error']['message'] . '<br>';
+        }  
+        
     }
 
     /**
@@ -103,7 +135,7 @@ class ChargeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -115,5 +147,26 @@ class ChargeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function capture($id)
+    {
+        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+
+        try {
+
+            $capture = StripeCharge::retrieve($id);
+            $capture->capture();
+
+        } catch (StripeError\Base $e) {
+
+            $errorBody = $e->getJsonBody();
+
+            echo 'Status is: ' . $e->getHttpStatus() . '<br>';
+            echo 'Param is: ' . $errorBody['error']['param'] . '<br>';
+            echo 'Message is: ' . $errorBody['error']['message'] . '<br>';
+        }  
+
+        
     }
 }

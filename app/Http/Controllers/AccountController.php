@@ -13,6 +13,7 @@ use Stripe\Charge as StripeCharge;
 use Stripe\Token as StripeToken;
 use Stripe\Coupon as StripeCoupon;
 use Stripe\Customer as StripeCustomer;
+use Stripe\Error as StripeError;
 
 class AccountController extends Controller
 {
@@ -64,15 +65,23 @@ class AccountController extends Controller
 
         $email = $request->input('email');        
         $country = $request->input('country');        
-        $managed = $request->input('managed');        
+        $managed = $request->input('managed');   
 
-        $account = StripeAccount::create([
-            "managed" => $managed,
-            "country" => $country,
-            "email" => $email 
-        ]);
+        try {
 
-        return redirect('/account');
+            $account = StripeAccount::create([
+                "managed" => $managed,
+                "country" => $country,
+                "email" => $email 
+            ]);
+
+            return redirect('/account');
+
+        } catch (StripeError\Base $e) {
+
+            return $e->getMessage();
+        }     
+        
     }
 
     /**
@@ -81,8 +90,18 @@ class AccountController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function show($customerID)
+    public function show($accountId)
     {
+        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+
+        try {
+
+            $stripeAccount = StripeAccount::retrieve($accountId);
+
+        } catch (StripeError\Base $e) {
+
+            return $e->getMessage();
+        }
         
     }
 
@@ -94,7 +113,18 @@ class AccountController extends Controller
      */
     public function edit($id)
     {
-        //
+        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+
+        try {
+
+            $stripeAccount = StripeAccount::retrieve($id);
+
+            return view('account.edit')->with('account', $stripeAccount);
+
+        } catch (StripeError\Base $e) {
+
+            return $e->getMessage();
+        }
     }
 
     /**
