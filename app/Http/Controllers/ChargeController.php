@@ -18,12 +18,6 @@ use Stripe\Error as StripeError;
 class ChargeController extends Controller
 {
 
-    private $stripeConfig;
-    public function __construct()
-    {   
-        $this->stripeConfig = \Config::get('stripe');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -52,7 +46,7 @@ class ChargeController extends Controller
      */
     public function store(Request $request)
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         $stripeToken = $request->input('stripeToken');        
         $amount = $request->input('amount');        
@@ -60,10 +54,6 @@ class ChargeController extends Controller
         $description = $request->input('description');      
 
         try {
-
-            echo '<pre>';
-            print_r($request->all());
-            echo '</pre>';
 
             $charge = StripeCharge::create([
                 "amount" => $amount,
@@ -94,7 +84,7 @@ class ChargeController extends Controller
      */
     public function show($code)
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         try {
 
@@ -151,7 +141,7 @@ class ChargeController extends Controller
 
     public function capture($id)
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         try {
 

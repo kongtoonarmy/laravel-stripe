@@ -17,12 +17,6 @@ use Stripe\Error as StripeError;
 
 class AccountController extends Controller
 {
-    private $stripeConfig;
-    public function __construct()
-    {   
-        $this->stripeConfig = \Config::get('stripe');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -30,7 +24,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         $account = StripeAccount::all([
             'limit' => 10
@@ -40,7 +34,7 @@ class AccountController extends Controller
         print_r($account->data);
         echo '</pre>';*/
 
-        return view('account.index', ['accounts' => $account->data]);    
+        return view('accounts.index', ['accounts' => $account->data]);    
     }
 
     /**
@@ -50,7 +44,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        return view('account.create');      
+        return view('accounts.create');      
     }
 
     /**
@@ -61,7 +55,7 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         $email = $request->input('email');        
         $country = $request->input('country');        
@@ -75,7 +69,7 @@ class AccountController extends Controller
                 "email" => $email 
             ]);
 
-            return redirect('/account');
+            return redirect('/accounts');
 
         } catch (StripeError\Base $e) {
 
@@ -92,13 +86,17 @@ class AccountController extends Controller
      */
     public function show($accountId)
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         try {
 
             $stripeAccount = StripeAccount::retrieve($accountId);
 
-            return view('account.show', ['account' => $stripeAccount]);    
+            /*echo '<pre>';
+            print_r($stripeAccount);
+            echo '</pre>';*/
+
+            return view('accounts.show', ['account' => $stripeAccount]);    
 
         } catch (StripeError\Base $e) {
 
@@ -115,13 +113,13 @@ class AccountController extends Controller
      */
     public function edit($id)
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
 
         try {
 
             $stripeAccount = StripeAccount::retrieve($id);
 
-            return view('account.edit')->with('account', $stripeAccount);
+            return view('accounts.edit')->with('account', $stripeAccount);
 
         } catch (StripeError\Base $e) {
 
@@ -149,7 +147,7 @@ class AccountController extends Controller
      */
     public function destroy($accountId = '')
     {
-        Stripe::setApiKey($this->stripeConfig['testSecretKey']);
+        Stripe::setApiKey(\Config::get('stripe.key'));
         
         try {
             $account = StripeAccount::retrieve($accountId);
@@ -158,6 +156,6 @@ class AccountController extends Controller
             echo($e->getMessage());
         }
 
-        return redirect('/account');
+        return redirect('/accounts');
     }
 }

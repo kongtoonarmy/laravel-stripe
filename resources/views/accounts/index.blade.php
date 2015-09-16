@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('breadcrumbs', Breadcrumbs::render('account.create'))
+@section('breadcrumbs', Breadcrumbs::render('accounts.index'))
 
 @section('content')
 <h3>List Account</h3>
@@ -18,10 +18,10 @@
 	<tbody>
 		@foreach ($accounts as $account)
 		<tr>
-			<td><a href="/account/{!! $account->id !!}">{!! $account->id !!}</a></td>
+			<td><a href="/accounts/{!! $account->id !!}">{!! $account->id !!}</a></td>
 			<td>{!! $account->email !!}</td>
 			<td>{!! $account->country !!}</td>
-			<td><a href="/account/{!! $account->id !!}/edit" class="btn btn-info">Edit</a></td>
+			<td><a href="{!! route('accounts.edit', $account->id) !!}" class="btn btn-info">Edit</a></td>
 			<td>
 				{!! Form::open([
 					'method' => 'DELETE', 
@@ -38,7 +38,7 @@
 </table>
 </div>
 <hr>
-<a href="/account/create/" role="button" class="btn btn-success">Create</a>
+<a href="/accounts/create/" role="button" class="btn btn-success">Create</a>
 @stop
 
 	

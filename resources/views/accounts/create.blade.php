@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('breadcrumbs', Breadcrumbs::render('account.create'))
+@section('breadcrumbs', Breadcrumbs::render('accounts.create'))
 
 @section('content')
 <h2>Create New Account</h2>

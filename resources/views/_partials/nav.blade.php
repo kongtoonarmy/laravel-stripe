@@ -8,6 +8,7 @@
 	
 	<ul class="nav navbar-nav navbar-right">
 		<li><a href="/account">Account</a></li>
+		<li><a href="/cards">Cards</a></li>
 		<li><a href="#">Charge</a></li>
 	</ul>	
 
